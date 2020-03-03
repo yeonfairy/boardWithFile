@@ -12,11 +12,7 @@
 	</resultMap>
 
 	<select id="selectBoardList" resultMap="boardResultSet">
-	SELECT A.BOARD_NO
-         , A.BOARD_CONTENT
-         , A.BOARD_TITLE
-         , A.BOARD_WRITER
-         , A.BOARD_COUNT
+	SELECT A.*
          , (SELECT ORG_FILE_NAME FROM TEST.MP_FILE WHERE BOARD_NO = A.BOARD_NO) AS ORG_FILE_NAME
     FROM  TEST.BOARD_TB A
     ORDER BY BOARD_NO DESC
