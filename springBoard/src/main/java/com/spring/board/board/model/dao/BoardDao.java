@@ -7,6 +7,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
 
 import com.spring.board.board.model.vo.Board;
 import com.spring.board.board.model.vo.FileVo;
@@ -62,4 +63,14 @@ public class BoardDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/*
+	public int updateBoard(Board board) throws Exception {
+		sqlSession.insert("boardMapper.updateBoard", board);
+	}
+	*/
+	//첨부파일 등록
+	public void updateBoardFile(Map<String, Object> map) throws Exception {
+		sqlSession.insert("boardMapper.updateBoardFile", map);
+	}	
+	
 }

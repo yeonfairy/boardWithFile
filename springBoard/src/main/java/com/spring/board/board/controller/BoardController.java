@@ -1,6 +1,7 @@
 package com.spring.board.board.controller;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,11 +90,32 @@ public class BoardController {
 		System.out.println("boardInsert.boardInsert::::::::::::::::::::::::::::::::::"+board);
 
 	    bService.insertBoard(board, mpRequest);
+	      System.out.println("저장이 성공적--------------------");
 
 		return "redirect:board.do";
 	
 	}
-
+	/*
+	@RequestMapping(value = "updateBoard.do")
+	public String updateBoard(HttpServletRequest request, Model model) throws Exception {
+	       
+	        String bNo = request.getParameter("bNo");
+	       
+			ArrayList<Board> bList = bService.selectBoardList();
+			model.addAttribute("bList", bList);       
+	 
+	      System.out.println("업데이트 확인");
+	        return "board/boardUpdate";
+	}
+	*/
+/*
+	@RequestMapping(value = "updateBoardSave.do")
+	public String updateBoardSave(Board request, Model model) throws Exception {
+	       
+	    bService.updateBoard(board, model);	
+	        return "board/boardView";
+	}
+	*/
 	@RequestMapping("boardDetail.do")
 	public String boardDetail(int bNo, String inputPwd, Model model, Board boardVo, HttpServletRequest request) throws Exception{
 		Board board = bService.selectBoardOne(bNo);
@@ -108,6 +130,7 @@ public class BoardController {
 	@RequestMapping("checkPwd.do")
 	public String checkingPwd(int bNo, Model model) {
 		model.addAttribute("bNo", bNo);
+
 		return "board/pwdChecking";
 	}
 
@@ -115,6 +138,8 @@ public class BoardController {
 	@RequestMapping("checkcheck.do")
 	public String checkcheck(String pwd, int bNo) {
 		int result = bService.selectBoardPwd(new Board(bNo, pwd));
+
+
 		return result + "";
 	}
 

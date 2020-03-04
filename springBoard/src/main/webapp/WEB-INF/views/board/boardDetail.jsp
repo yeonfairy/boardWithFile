@@ -98,7 +98,7 @@ function pwdSetting(str) {
 		error: function(e) {console.log(e);},
 		success: function(result) {
 			if (result > 0 ) {
-				alert("비밀번호가 설정 되었습니다.");
+				alert("비밀번호가 설정이 되었습니다.");
 			} else {
 				alert("비밀번호 설정에 실패 하였습니다.");
 			}

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.board.board.model.dao.BoardDao;
@@ -65,5 +66,16 @@ public class BoardService {
 	public int updateBoardPwd(Board board) {
 		return bDao.updateBoardPwd(board);
 	}
-
+	/*
+	public void updateBoard(Board boardVo, MultipartHttpServletRequest mpRequest) {
+		bDao.updateBoard(boardVo, mpRequest);
+		//첨부파일 추가
+		List<Map<String, Object>> list = fileUtils.parseInsertFileInfo(boardVo, mpRequest);
+		int size = list.size();
+		for (int i = 0; i < size; i++) {
+			bDao.insertBoardFile(list.get(i));
+		}
+		
+	}
+*/
 }

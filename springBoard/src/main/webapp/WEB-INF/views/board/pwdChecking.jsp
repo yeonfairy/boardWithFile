@@ -29,6 +29,7 @@ $(function(){
 			error: function(e) { console.log(e); },
 			success: function(result){
 				if (result == 1) {
+					alert("비밀번호가 일치합니다");
 					opener.location.href='boardDetail.do?bNo='+"${ bNo }";
 					self.close();
 				} else {

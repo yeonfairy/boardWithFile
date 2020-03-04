@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>boardInsert</title>
+<title>boardUpdate</title>
 <style>
 #container {
 	width: 800px;
@@ -36,8 +39,6 @@ tr:nth-child(5) td {
 	text-align: center;
 }
 </style>
-<!-- 스마트 에디터 -->
-<script type="text/javascript" src="<%=request.getContextPath()  %> /smarteditor/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -46,18 +47,22 @@ tr:nth-child(5) td {
 </head>
 <body>
 <div id="container">
-<h2>글쓰기</h2>
-<form action="boardInsert.do" method="post" enctype="multipart/form-data">
+<h2>상세조회</h2>
+<form action="updateBoardSave.do" method="post" enctype="multipart/form-data">
 <input type="hidden" name="boardWriter" value="${ loginUser.userId }">
 <input type="hidden" name="boardPwd">
 <table>
+  <c:forEach var="b" items="${ bList }">
 	<tr>
+	<td>글번호</td>
+      <td><input type="text" name="boardNo" size="10" maxlength="250" value="<c:out value="${ b.boardNo }"/>"></td>
+	
 		<td>제목</td>
-		<td><input type="text" name="boardTitle"></td>
-	</tr>
+    <td><textarea name="brdmemo" rows="1" cols="60"><c:out value="${ b.boardTitle }"/></textarea></td>
 	<tr>
 		<td>내용</td>
-		<td><textarea name="boardContent"></textarea></td>
+    <td><textarea name="brdmemo" rows="5" cols="60"><c:out value="${ b.boardContent }"/></textarea></td>
+
 	</tr>
 	<tr>
 		<td>첨부파일</td>
@@ -72,23 +77,24 @@ tr:nth-child(5) td {
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2">		
-			<button id="saveAll">저장</button>
+		<td colspan="2">
+			<button>수정</button>
 			<button type="button" onclick="location.href='board.do'">취소</button>
 		</td>
 	</tr>
+</c:forEach>
 </table>
+<input type="hidden" name="bNo" value="<c:out value="${b.boardNo}"/>">
 </form>
 </div>
 </body>
 <script>
 function pwdWindowOpen(){
-	window.open("inputPwd.do", null, "width=800 height=400");
+	window.open("inputPwd.do", "null", "width=800 height=400");
 }
 function pwdSetting(str) {
 	$("input[name=boardPwd]").val(str);
 	$("#pwdResult").text(" Y ");
-	alert("비밀번호가 설정 되었습니다.");
 }
 </script>
 </html>
