@@ -66,16 +66,19 @@ public class BoardService {
 	public int updateBoardPwd(Board board) {
 		return bDao.updateBoardPwd(board);
 	}
-	/*
-	public void updateBoard(Board boardVo, MultipartHttpServletRequest mpRequest) {
-		bDao.updateBoard(boardVo, mpRequest);
+
+	public void deleteBoard(int boardNo) {
+		bDao.deleteBoard(boardNo);
+	}
+
+	public void updateBoard(Board boardVO, MultipartHttpServletRequest mpRequest) throws Exception {
+		//게시글 추가
+		bDao.updateBoard(boardVO);
 		//첨부파일 추가
-		List<Map<String, Object>> list = fileUtils.parseInsertFileInfo(boardVo, mpRequest);
+		List<Map<String, Object>> list = fileUtils.parseInsertFileInfo(boardVO, mpRequest);
 		int size = list.size();
 		for (int i = 0; i < size; i++) {
-			bDao.insertBoardFile(list.get(i));
+			bDao.updateBoardFile(list.get(i));
 		}
-		
 	}
-*/
 }

@@ -37,7 +37,22 @@
 			#{FILE_SIZE}
 		)
     </insert>
+	<update id="updateBoard" parameterType="Board">
+		UPDATE TEST.BOARD_TB 
+		SET boardContent = #{ boardContent },
+		    boardTitle = #{ boardTitle },
+		    boardPwd = #{ boardPwd })
+		WHERE BOARD_NO = #{ boardNo }
+	</update>
 
+	<update id="updateBoardFile" parameterType="hashMap">
+		UPDATE MP_FILE
+		SET FILE_NO = (SELECT max(BOARD_NO) keep(dense_rank first order by BOARD_NO desc) as BNO FROM TEST.BOARD_TB),
+			ORG_FILE_NAME = #{ORG_FILE_NAME},
+			STORED_FILE_NAME = #{STORED_FILE_NAME},
+			FILE_SIZE = #{FILE_SIZE}
+		WHERE BOARD_NO = #{ boardNo }
+    </update>
 	<!-- 첨부파일 조회 -->
 	<select id="selectFileList" parameterType="int" resultType="hashMap">
         SELECT 
@@ -89,10 +104,16 @@
 		AND BOARD_PWD = #{ boardPwd }
 	</select>
 
-	<update id="updateBoardPwd" parameterType="Board">
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM BOARD_TB
+		WHERE BOARD_NO = #{ boardNo }
+	</delete>
+	
+		<update id="updateBoardPwd" parameterType="Board">
 		UPDATE BOARD_TB
 		SET
 		BOARD_PWD = #{ boardPwd }
 		WHERE BOARD_NO = #{ boardNo }
 	</update>
+	
 </mapper>

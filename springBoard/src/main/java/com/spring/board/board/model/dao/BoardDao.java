@@ -63,14 +63,17 @@ public class BoardDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	/*
-	public int updateBoard(Board board) throws Exception {
+	
+	public void updateBoard(Board board) throws Exception {
 		sqlSession.insert("boardMapper.updateBoard", board);
 	}
-	*/
+	
 	//첨부파일 등록
 	public void updateBoardFile(Map<String, Object> map) throws Exception {
 		sqlSession.insert("boardMapper.updateBoardFile", map);
+	}
+	public void deleteBoard(int boardNo) {
+		sqlSession.delete("boardMapper.deleteBoard", boardNo);
 	}	
 	
 }

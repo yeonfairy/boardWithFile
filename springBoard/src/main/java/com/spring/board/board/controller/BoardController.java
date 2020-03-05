@@ -95,35 +95,51 @@ public class BoardController {
 		return "redirect:board.do";
 	
 	}
-	/*
-	@RequestMapping(value = "updateBoard.do")
-	public String updateBoard(HttpServletRequest request, Model model) throws Exception {
-	       
-	        String bNo = request.getParameter("bNo");
-	       
-			ArrayList<Board> bList = bService.selectBoardList();
-			model.addAttribute("bList", bList);       
-	 
-	      System.out.println("업데이트 확인");
-	        return "board/boardUpdate";
+	
+	@RequestMapping(value = "deleteBoard.do", method = RequestMethod.POST)
+	public String deletingBoard(@RequestParam int boardNo) throws Exception {
+		System.out.println("deleteBoard.deleteBoard::::::::::::::::::::::::::::::::::"+boardNo);
+
+	    bService.deleteBoard(boardNo);
+	      System.out.println("저장이 삭제--------------------");
+
+			return "redirect:board.do";
+	
 	}
-	*/
-/*
+	
+	@RequestMapping(value = "updateForm.do", method = RequestMethod.GET)
+	public String boardUpdateView() {
+
+		return "board/boardUpdate";
+	}
+	
+
 	@RequestMapping(value = "updateBoardSave.do")
-	public String updateBoardSave(Board request, Model model) throws Exception {
-	       
-	    bService.updateBoard(board, model);	
-	        return "board/boardView";
+	public String updateBoardSave(Board board, MultipartHttpServletRequest mpRequest) throws Exception {
+	    System.out.println("저장이 성공적--------------------");
+
+		board.setBoardNo(Integer.parseInt(mpRequest.getParameter("boardNo")));
+		board.setBoardTitle(mpRequest.getParameter("boardTitle"));
+		board.setBoardContent((mpRequest.getParameter("boardContent")));
+		board.setBoardPwd((mpRequest.getParameter("boardPwd")));
+		
+	    bService.updateBoard(board, mpRequest);
+	    System.out.println("저장이 성공적--------------------");
+		return "redirect:board.do";
 	}
-	*/
+	
 	@RequestMapping("boardDetail.do")
 	public String boardDetail(int bNo, String inputPwd, Model model, Board boardVo, HttpServletRequest request) throws Exception{
 		Board board = bService.selectBoardOne(bNo);
 		String id = request.getParameter("bNo");
+
 		model.addAttribute("board", board);
 		List<Map<String, Object>> fileList = bService.selectFileList(bNo);
 		model.addAttribute("file", fileList);
 		
+		
+		ArrayList<Board> bList = bService.selectBoardList();
+		model.addAttribute("bList", bList);
 		return "board/boardDetail";
 	}
 

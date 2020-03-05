@@ -81,6 +81,8 @@
 	</table></br>
 	<button type="button" onclick="openSettingPwd();">비밀번호 설정</button>
 	<button type="button" onclick="location.href='board.do'">목록</button>
+	<button type="button" onclick="openUpdating();">수정</button>
+	<button type="button" onclick="openDeleting();">삭제</button>
 	</section>
 	</form>
 </div>
@@ -102,6 +104,31 @@ function pwdSetting(str) {
 			} else {
 				alert("비밀번호 설정에 실패 하였습니다.");
 			}
+		}
+	});
+}
+function openDeleting(){
+	$.ajax({
+		url: "deleteBoard.do",
+		data: { boardNo: ${ board.boardNo } },
+		type: "POST",
+		error: function(e) {console.log(e);},
+		success: function(result) {
+			alert("삭제 되었습니다.");
+			location.href='board.do';
+		}
+	});
+}
+function openUpdating(){
+	$.ajax({
+		url: "board.do",
+		data: { 
+			boardNo: ${ board.boardNo } },
+		type: "POST",
+		error: function(e) {console.log(e);},
+		success: function(result) {
+			alert("수정되었습니다.")
+			location.href='updateForm.do';
 		}
 	});
 }

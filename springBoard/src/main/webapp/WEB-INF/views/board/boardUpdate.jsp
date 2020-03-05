@@ -47,8 +47,8 @@ tr:nth-child(5) td {
 </head>
 <body>
 <div id="container">
-<h2>상세조회</h2>
-<form action="updateBoardSave.do" method="post" enctype="multipart/form-data">
+<h2>상세조회 수정</h2>
+<form action="board.do" method="post" enctype="multipart/form-data">
 <input type="hidden" name="boardWriter" value="${ loginUser.userId }">
 <input type="hidden" name="boardPwd">
 <table>
@@ -56,7 +56,8 @@ tr:nth-child(5) td {
 	<tr>
 	<td>글번호</td>
       <td><input type="text" name="boardNo" size="10" maxlength="250" value="<c:out value="${ b.boardNo }"/>"></td>
-	
+	  <td><input type="hidden" name="boardNo" size="10" maxlength="250" value="<c:out value="${ b.boardNo }"/>"></td>
+
 		<td>제목</td>
     <td><textarea name="brdmemo" rows="1" cols="60"><c:out value="${ b.boardTitle }"/></textarea></td>
 	<tr>
