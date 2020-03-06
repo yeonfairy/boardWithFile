@@ -107,24 +107,25 @@ public class BoardController {
 	
 	}
 	
-	@RequestMapping(value = "updateForm.do", method = RequestMethod.GET)
-	public String boardUpdateView() {
-
+	@RequestMapping(value = "updateForm.do")
+	public String boardUpdateView(Board board, Model model, HttpServletRequest request) throws Exception {
+		System.out.println("접속=================시작");
+		int id = Integer.parseInt(request.getParameter("boardNo"));
+		board = bService.selectBoardOne(id);
+		model.addAttribute("boardNo", id);
+		model.addAttribute("board", board);
+		
+		List<Map<String, Object>> fileList = bService.selectFileList(id);
+		model.addAttribute("file", fileList);
+		System.out.println("접속=================끝");		
 		return "board/boardUpdate";
 	}
 	
-
 	@RequestMapping(value = "updateBoardSave.do")
 	public String updateBoardSave(Board board, MultipartHttpServletRequest mpRequest) throws Exception {
-	    System.out.println("저장이 성공적--------------------");
-
-		board.setBoardNo(Integer.parseInt(mpRequest.getParameter("boardNo")));
-		board.setBoardTitle(mpRequest.getParameter("boardTitle"));
-		board.setBoardContent((mpRequest.getParameter("boardContent")));
-		board.setBoardPwd((mpRequest.getParameter("boardPwd")));
-		
+		System.out.println("업로드접속=================시작");
 	    bService.updateBoard(board, mpRequest);
-	    System.out.println("저장이 성공적--------------------");
+		System.out.println("접속=================끝");
 		return "redirect:board.do";
 	}
 	
@@ -136,7 +137,6 @@ public class BoardController {
 		model.addAttribute("board", board);
 		List<Map<String, Object>> fileList = bService.selectFileList(bNo);
 		model.addAttribute("file", fileList);
-		
 		
 		ArrayList<Board> bList = bService.selectBoardList();
 		model.addAttribute("bList", bList);

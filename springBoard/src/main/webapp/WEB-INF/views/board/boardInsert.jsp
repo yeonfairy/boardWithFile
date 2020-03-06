@@ -42,12 +42,20 @@ tr:nth-child(5) td {
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 </head>
 <body>
 <div id="container">
 <h2>글쓰기</h2>
 <form action="boardInsert.do" method="post" enctype="multipart/form-data">
+<input type="hidden" id="BOARD_NO" name="BOARD_NO" value=""> 
 <input type="hidden" name="boardWriter" value="${ loginUser.userId }">
 <input type="hidden" name="boardPwd">
 <table>
@@ -57,7 +65,7 @@ tr:nth-child(5) td {
 	</tr>
 	<tr>
 		<td>내용</td>
-		<td><textarea name="boardContent"></textarea></td>
+		<td><textarea id ="summernote" name="boardContent"></textarea></td>
 	</tr>
 	<tr>
 		<td>첨부파일</td>
@@ -90,5 +98,16 @@ function pwdSetting(str) {
 	$("#pwdResult").text(" Y ");
 	alert("비밀번호가 설정 되었습니다.");
 }
+$(document).ready(function() {
+	$('#summernote').summernote({
+		  height: 300,                 // 에디터 높이
+		  minHeight: null,             // 최소 높이
+		  maxHeight: null,             // 최대 높이
+		  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+		  lang: "ko-KR",					// 한글 설정
+		  placeholder: ''	//placeholder 설정
+          
+	});
+});
 </script>
 </html>

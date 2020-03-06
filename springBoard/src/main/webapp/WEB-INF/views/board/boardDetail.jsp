@@ -30,14 +30,6 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <script type="text/javascript">
-<!--	function fn_fileDown(boardNo)
-	{
-		var file = document.createElement('form');
-		var input = document.createElement('input');
-		input.setAttribute("value",boardNo);
-		f.action="fileDown.do";
-		f.submit();
-	} -->
 	function fn_fileDown(boardNo){
 		var formObj = $("form[name='readForm']");
 		$("#BOARD_NO").attr("value", boardNo);
@@ -45,6 +37,14 @@
 		formObj.submit();
 	}
 </script>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 </head>
 <body>
 <div id="container">
@@ -68,7 +68,7 @@
 		</tr>
 		<tr>
 			<td colspan="4">
-				<textarea readonly>${ board.boardContent }</textarea>
+				<textarea readonly id ="summernote"> ${ board.boardContent }</textarea>
 			</td>
 		</tr>	
 		<td>
@@ -81,7 +81,7 @@
 	</table></br>
 	<button type="button" onclick="openSettingPwd();">비밀번호 설정</button>
 	<button type="button" onclick="location.href='board.do'">목록</button>
-	<button type="button" onclick="openUpdating();">수정</button>
+	<button><a href="updateForm.do?boardNo=${ board.boardNo }">수정</a></button>
 	<button type="button" onclick="openDeleting();">삭제</button>
 	</section>
 	</form>
@@ -119,18 +119,16 @@ function openDeleting(){
 		}
 	});
 }
-function openUpdating(){
-	$.ajax({
-		url: "board.do",
-		data: { 
-			boardNo: ${ board.boardNo } },
-		type: "POST",
-		error: function(e) {console.log(e);},
-		success: function(result) {
-			alert("수정되었습니다.")
-			location.href='updateForm.do';
-		}
+$(document).ready(function() {
+	$('#summernote').summernote({
+		  height: 300,                 // 에디터 높이
+		  minHeight: null,             // 최소 높이
+		  maxHeight: null,             // 최대 높이
+		  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+		  lang: "ko-KR",					// 한글 설정
+		  placeholder: ''	//placeholder 설정
+          
 	});
-}
+});
 </script>
 </html>

@@ -1,101 +1,134 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.io.File" %>
+<%@ page import="java.io.*"%>
+<%@ page import="java.net.URLEncoder"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>boardUpdate</title>
+<title>boardDetail</title>
 <style>
 #container {
 	width: 800px;
 	margin: auto;
 }
-h2 {
-	text-align: center;
-}
-table {
+#container table {
 	width: 100%;
 }
-table td {
+#container td {
 	border: 1px solid #ccc;
 }
-table input, table textarea {
+#container textarea {
 	width: 99%;
-}
-textarea {
 	min-height: 300px;
-}
-
-tr:nth-child(3) td {
-	text-align: left;
-}
-tr:nth-child(4) td {
-	text-align: right;
-}
-tr:nth-child(5) td {
-	text-align: center;
+	height: 100%;
 }
 </style>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script type="text/javascript">
+	function fn_fileDown(boardNo){
+		var formObj = $("form[name='readForm']");
+		$("#BOARD_NO").attr("value", boardNo);
+		formObj.attr("action", "fileDown.do");
+		formObj.submit();
+	}
+</script>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 </head>
 <body>
 <div id="container">
-<h2>상세조회 수정</h2>
-<form action="board.do" method="post" enctype="multipart/form-data">
-<input type="hidden" name="boardWriter" value="${ loginUser.userId }">
-<input type="hidden" name="boardPwd">
-<table>
-  <c:forEach var="b" items="${ bList }">
-	<tr>
-	<td>글번호</td>
-      <td><input type="text" name="boardNo" size="10" maxlength="250" value="<c:out value="${ b.boardNo }"/>"></td>
-	  <td><input type="hidden" name="boardNo" size="10" maxlength="250" value="<c:out value="${ b.boardNo }"/>"></td>
-
-		<td>제목</td>
-    <td><textarea name="brdmemo" rows="1" cols="60"><c:out value="${ b.boardTitle }"/></textarea></td>
-	<tr>
-		<td>내용</td>
-    <td><textarea name="brdmemo" rows="5" cols="60"><c:out value="${ b.boardContent }"/></textarea></td>
-
-	</tr>
-	<tr>
-		<td>첨부파일</td>
-		<td>
-	 	<input type="file" name="file"><br/>
-		</td>	
-	</tr>
+<h2>세부사항 수정</h2>
+      <section id="container">
+      
+	    <form name="file" role="form" method="post" enctype="multipart/form-data"> 
+			<input type="hidden" id="boardNo" name="boardNo" value=${ board.boardNo }> 
+	<table>
 		<tr>
-		<td colspan="2">
-			<button type="button" id="pwdInput" onclick="pwdWindowOpen();">비밀번호 설정</button>
-			<span id="pwdResult"> N </span>
+			<td>번호</td>
+			<td>제목</td>
+			<td>작성자</td>
+			<td>조회수</td>
+		</tr>
+		<tr>
+			<td>${ board.boardNo }</td>
+			<td><input type="text" name="boardTitle" value=${ board.boardTitle } ></td>
+			<td>${ board.boardWriter }</td>
+			<td>${ board.boardCount }</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<textarea readonly id ="summernote"/> ${ board.boardContent } </textarea>
+			</td>
+		</tr>		
+		<td>
+				<div class="form-group" style="border: 1px solid #dbdbdb;">
+					<c:forEach var="file" items="${file}">
+					첨부파일:	 <a href="fileDown.do?boardNo=${ file.BOARD_NO }">${ file.ORG_FILE_NAME }</a>(${file.FILE_SIZE}kb)
+					</c:forEach>
+				</div>
 		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<button>수정</button>
-			<button type="button" onclick="location.href='board.do'">취소</button>
-		</td>
-	</tr>
-</c:forEach>
-</table>
-<input type="hidden" name="bNo" value="<c:out value="${b.boardNo}"/>">
-</form>
+	</table></br>
+	<button type="button" onclick="openSettingPwd();">비밀번호 설정</button>
+	<button type="button" onclick="location.href='board.do'">목록</button>
+	<button type="button" onclick="openUpdating();">수정</button>
+	<button type="reset">취소</button>
+	</section>
+	</form>
 </div>
 </body>
 <script>
-function pwdWindowOpen(){
-	window.open("inputPwd.do", "null", "width=800 height=400");
+function openSettingPwd(){
+	window.open("inputPwd.do", null, "width=800 height=400");
 }
 function pwdSetting(str) {
-	$("input[name=boardPwd]").val(str);
-	$("#pwdResult").text(" Y ");
+	$.ajax({
+		url: "settingpwd.do",
+		data: { pwd: str,
+				bNo: ${ board.boardNo } },
+		type: "POST",
+		error: function(e) {console.log(e);},
+		success: function(result) {
+			if (result > 0 ) {
+				alert("비밀번호가 설정이 되었습니다.");
+			} else {
+				alert("비밀번호 설정에 실패 하였습니다.");
+			}
+		}
+	});
 }
+function openUpdating(){
+	$.ajax({
+		url: "updateForm.do",
+		data: { boardNo: ${ board.boardNo } },
+		type: "GET",
+		error: function(e) {console.log(e);},
+		success: function(result) {
+		alert("수정 되었습니다.");
+		location.href='updateForm.do';
+		}
+	});
+}
+$(document).ready(function() {
+	$('#summernote').summernote({
+		  height: 300,                 // 에디터 높이
+		  minHeight: null,             // 최소 높이
+		  maxHeight: null,             // 최대 높이
+		  focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+		  lang: "ko-KR",					// 한글 설정
+		  placeholder: ''	//placeholder 설정
+          
+	});
+});
 </script>
 </html>
