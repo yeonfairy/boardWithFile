@@ -45,6 +45,9 @@
 <!-- include summernote css/js -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+<script src="${pageContext.request.contextPath}/resource/js/jquery-3.2.0.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/bootstrap.css" />
+
 </head>
 <body>
 <div id="container">
@@ -68,7 +71,12 @@
 		</tr>
 		<tr>
 			<td colspan="4">
-				<textarea readonly id ="summernote"> ${ board.boardContent }</textarea>
+				<textarea readonly id ="summernote"> ${ board.boardContent }
+				<img src = "https://images.freeimages.com/images/premium/previews/3809/38096216-cartoon-little-teddy-bear.jpg" />
+				</br></br>
+				<img src = "<c:url value="/img/${ originalFileName }  " />"  />		
+				 </textarea>
+
 			</td>
 		</tr>	
 		<td>

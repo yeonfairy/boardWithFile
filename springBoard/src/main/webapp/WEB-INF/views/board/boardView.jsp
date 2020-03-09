@@ -7,6 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>boardList</title>
 <style>
 #container {
@@ -59,6 +60,7 @@
 		</br>
 		</br>
 		<button type="button" onclick="location.href='insertForm.do'">글쓰기</button>
+		<button type="button" onclick="location.href='sendMailForm.do'">문의사항 메일보내기</button>
 	</div>
 </body>
 <script>

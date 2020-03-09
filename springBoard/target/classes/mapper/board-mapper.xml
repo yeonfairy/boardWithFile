@@ -12,8 +12,7 @@
 	</resultMap>
 
 	<select id="selectBoardList" resultMap="boardResultSet">
-	SELECT A.*
-         	, (SELECT ORG_FILE_NAME FROM TEST.MP_FILE WHERE BOARD_NO = A.BOARD_NO) AS ORG_FILE_NAME
+	SELECT A.*, (SELECT ORG_FILE_NAME FROM TEST.MP_FILE WHERE BOARD_NO = A.BOARD_NO AND A.BOARD_NO = #{ boardNo }) AS ORG_FILE_NAME
     FROM  TEST.BOARD_TB A
     ORDER BY BOARD_NO DESC
 	</select>
@@ -39,8 +38,8 @@
     </insert>
 	<update id="updateBoard" parameterType="Board">
 		UPDATE TEST.BOARD_TB 
-		SET boardContent = #{ boardContent },
-		    boardTitle = #{ boardTitle },
+		SET boardTitle = #{ boardTitle },
+		boardContent = #{ boardContent },
 		    boardPwd = #{ boardPwd })
 		WHERE BOARD_NO = #{ boardNo }
 	</update>
