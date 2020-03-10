@@ -66,7 +66,8 @@
 		WHERE BOARD_NO = A.BOARD_NO
 		AND A.BOARD_NO = #{ boardNo }
 	</select>
-	
+	<!--  페이징 처리 -->
+	<select id="listPage" resultType = "Board" parameterType="int" ></select>
 	<!-- 첨부파일 다운 -->
 	<select id="selectFileInfo"  parameterType="int" resultType="hashMap">
         SELECT 

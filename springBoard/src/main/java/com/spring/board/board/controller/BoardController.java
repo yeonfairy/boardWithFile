@@ -3,7 +3,6 @@ package com.spring.board.board.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +16,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +28,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.google.gson.JsonObject;
 import com.spring.board.board.model.service.BoardService;
 import com.spring.board.board.model.vo.Board;
-import com.spring.board.board.model.vo.FileVo;
 
 @Controller
 public class BoardController {
@@ -44,13 +40,9 @@ public class BoardController {
 	public String boardView(Model model, Board boardVo) throws Exception{
 
 		ArrayList<Board> bList = bService.selectBoardList();
-//		System.out.println("????" + bList);
-
 		model.addAttribute("bList", bList);
 		List<Map<String, Object>> fileList = bService.selectFileList(boardVo.getBoardNo());
 		model.addAttribute("file", fileList);
-//		logger.info("board =================== ");
-//		logger.warn("warn!!!!!!");
 
 		return "board/boardView";
 	}
@@ -151,10 +143,10 @@ public class BoardController {
 		return "redirect:board.do";
 	}
 	
-	@PostMapping(value="uploadSummernoteImageFile.do", produces = "application/json")
+	@RequestMapping(value="uploadImage.do", produces = "application/json")
 	@ResponseBody
-	public JsonObject uploadSummernoteImageFile(@RequestParam("imageFile") MultipartFile multipartFile, Model model) {
-		
+	public JsonObject uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile) throws Exception {
+
 		JsonObject jsonObject = new JsonObject();
 		
 		String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
@@ -164,13 +156,14 @@ public class BoardController {
 		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
 		
 		File targetFile = new File(fileRoot + originalFileName);	
-		model.addAttribute("imageFile", targetFile);
+		
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-			jsonObject.addProperty("url", "/summernoteImage/"+originalFileName);
+			jsonObject.addProperty("url", "/summernoteImage/"+savedFileName);
+		
 			jsonObject.addProperty("responseCode", "success");
-
+				
 		} catch (IOException e) {
 			FileUtils.deleteQuietly(targetFile);	//저장된 파일 삭제
 			jsonObject.addProperty("responseCode", "error");

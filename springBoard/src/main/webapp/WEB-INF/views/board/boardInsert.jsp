@@ -44,20 +44,23 @@ tr:nth-child(5) td {
 }
 </style>
 <!-- 스마트 에디터 -->
-<script type="text/javascript"
-	src="<%=request.getContextPath()%> /smarteditor/js/service/HuskyEZCreator.js"
-	charset="utf-8"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
 	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 	crossorigin="anonymous"></script>
 <!-- include libraries(jQuery, bootstrap) -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <!-- include summernote css/js -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 </head>
 <body>
 	<div id="container">
@@ -66,8 +69,8 @@ tr:nth-child(5) td {
 			enctype="multipart/form-data">
 			<input type="hidden" id="BOARD_NO" name="BOARD_NO" value="">
 			<input type="hidden" name="boardWriter" value="${ loginUser.userId }">
-			<input type="hidden" name="boardPwd">
-			<input type="hidden" name="imageFile">			
+			<input type="hidden" name="boardPwd"> <input type="hidden"
+				name="imageFile">
 			<table>
 				<tr>
 					<td>제목</td>
@@ -75,7 +78,7 @@ tr:nth-child(5) td {
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><textarea id="summernote" name="boardContent">
+					<td><textarea id="summernote" name="boardContent">${ board.boardContent }
 					</br>
 					</textarea></td>
 				</tr>
@@ -99,7 +102,7 @@ tr:nth-child(5) td {
 		</form>
 	</div>
 </body>
-<script>
+<script type="text/javascript">
 	function pwdWindowOpen() {
 		window.open("inputPwd.do", null, "width=800 height=400");
 	}
@@ -116,35 +119,39 @@ tr:nth-child(5) td {
 			focus : true, // 에디터 로딩후 포커스를 맞출지 여부
 			lang : "ko-KR", // 한글 설정
 			placeholder : '', //placeholder 설정
-				callbacks: {	//여기 부분이 이미지를 첨부하는 부분
-					onImageUpload : function(files) {
-						 for (var i = files.length - 1; i >= 0; i--) {
-						uploadSummernoteImageFile(files[i],this);
+			callbacks : { //여기 부분이 이미지를 첨부하는 부분
+				onImageUpload : function(files) {
+					for (var i = files.length - 1; i >= 0; i--) {
+						alert("접속1" + files);
+						console.log(files);
+						uploadSummernoteImageFile(files[i], this);
 					}
-			         }
 				}
+			}
 		});
 	});
-/**
-* 이미지 파일 업로드
-*/
-function uploadSummernoteImageFile(file, editor) {
-	data = new FormData();
-	data.append("imageFile", file);
-	$.ajax({
-		data : data,
-		type : "POST",
-		url : "uploadSummernoteImageFile.do",
-		contentType : false,
-		enctype: 'multipart/form-data',
-		processData : false,
-		success : function(data) {
-        	//항상 업로드된 파일의 url이 있어야 한다.
-			$(editor).summernote('editor.insertImage', data.url); //에디터에 이미지 출력
-        	alert("이미지가 성공적으로 업로드 되었습니다.");
-            $('#imageBoard > ul').append('<li><img src="'+url+'" width="480" height="auto"/></li>');
-		}
-	});
-}
+	/**
+	 * 이미지 파일 업로드
+	 */
+	function uploadSummernoteImageFile(file, el) {
+		data = new FormData();
+		data.append('file',	 file);
+		$.ajax({
+			data : data,
+			type : "POST",
+			url : "uploadImage.do",
+			contentType : false,
+			cache : false,
+			enctype : 'multipart/form-data',
+			processData : false,
+			success : function(url) {
+				alert("접속2 : " + url);
+				//	alert(form_data);
+				//항상 업로드된 파일의 url이 있어야 한다.
+				$(el).summernote('editor.insertImage', url);
+			}
+		
+		});
+	}
 </script>
 </html>
